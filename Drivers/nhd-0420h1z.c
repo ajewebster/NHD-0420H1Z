@@ -5,12 +5,8 @@
 #define COMMAND_MODE 0x00   //clears LCD RS line, for command transfer
 #define DATA_MODE 0x04      //sets LCD RS line to 1, for data transfer
 
-DigitalOut  led(LED1);      //Nucleo LED
 DigitalOut CS(D10);         //SPI Chip Select
 SPI ser_port(D11, D12, D13); //Initialise SPI, using default settings
-PwmOut      LED_var(D3);         
-AnalogIn    pot1(A0);
-
 
 //----------------- LCD functions---------------------//
 void init_lcd(void){      //follow designated procedure in data sheet
