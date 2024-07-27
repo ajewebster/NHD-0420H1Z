@@ -1,11 +1,3 @@
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __NHD-0420H1Z_H
-#define __NHD-0420H1Z_H
-
-#ifdef __cplusplus
- extern "C" {
-#endif
-
 // Exported functions
 void init_lcd(void);
 void clr_lcd(void);
