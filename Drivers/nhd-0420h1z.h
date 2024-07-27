@@ -6,6 +6,8 @@
  extern "C" {
 #endif
 
+#include "mbed.h"
+
 // Exported functions
 void init_lcd(void);
 void clr_lcd(void);
