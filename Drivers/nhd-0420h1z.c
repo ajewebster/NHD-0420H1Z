@@ -1,5 +1,5 @@
-/* Includes ------------------------------------------------------------------*/
-#include nhd-0420h1z.h
+#include "nhd-0420h1z.h"
+#include "mbed.h"
 
 #define ENABLE 0x08         // ORed in to data value to strobe E bit
 #define COMMAND_MODE 0x00   //clears LCD RS line, for command transfer
