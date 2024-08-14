@@ -17,4 +17,4 @@ public:
 private:
     DigitalOut* m_CS;
     SPI* m_serial_port;
-}
+};
