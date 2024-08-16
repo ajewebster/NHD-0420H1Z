@@ -1,9 +1,10 @@
 #ifndef LCDDRIVER_H
 #define LCDDRIVER_H
-#include <cstdio>
 #endif
 
 #include "mbed.h"
+
+namespace nhd0420h1z {
 
 #define ENABLE 0x08 // ORed in to data value to strobe E bit
 #define ENABLE_BUS_4                                                           \
@@ -41,8 +42,7 @@ public:
    *    @param busInOut BusInOut object consisting of 4 or 8 data and RW/RS/E
    * lines
    */
-  LCDDriver(BusOut *busOut)
-      : m_busOut{busOut} {
+  LCDDriver(BusOut *busOut) : m_busOut{busOut} {
     m_useBus = 1;
     if (m_busOut->mask() == 0x007F) {
       m_dataLines = 4;
@@ -54,7 +54,7 @@ public:
   }
 
   void init_4() { // follow designated procedure in data sheet
-    //bus_out(0x00);
+    // bus_out(0x00);
     thread_sleep_for(100);
     write_cmd(0x20); // command 0x20 = Wake up
     wait_us(30);
@@ -118,7 +118,7 @@ public:
     }
   }
   void clr_lcd(void) { // Clears display and waits required time
-    write_cmd(0x01); // display clear
+    write_cmd(0x01);   // display clear
     wait_us(1520);
   }
   void print_lcd(const char *string) { // Sends character string to LCD
@@ -180,3 +180,4 @@ private:
     m_busOut->write(data);
   }
 };
+} // namespace nhd0420h1z
