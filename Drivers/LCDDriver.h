@@ -49,7 +49,7 @@ public:
     } else if (m_busOut->mask() == 0x07FF) {
       m_dataLines = 8;
     } else {
-      printf("Invalid numer of datalines");
+      //printf("Invalid numer of datalines");
     }
   }
 
@@ -149,13 +149,13 @@ private:
     shift_out(lo_n & ~ENABLE);
   }
   void write_4bit_bus(int data, int mode) { // mode is RS line, cmd=0, data=1
-    printf("data: %4x, mode: %4x\r\n", data, mode);
+    //printf("data: %4x, mode: %4x\r\n", data, mode);
     int hi_n;
     int lo_n;
     hi_n = ((data >> 4) & 0x0F); // form the two 4-bit nibbles that will be sent
-    printf("hi_n: %4x\r\n", hi_n);
+    //printf("hi_n: %4x\r\n", hi_n);
     lo_n = (data & 0x0F);
-    printf("lo_n: %X\r\n", lo_n);
+    //printf("lo_n: %X\r\n", lo_n);
     // send each word twice, strobing the Enable line
     bus_out(hi_n | ENABLE_BUS_4 | WRITE_MODE_4 | mode);
     wait_us(1);
@@ -167,7 +167,7 @@ private:
   }
   void write_8bit_bus(int data, int mode) {
     bus_out(data | ENABLE_BUS_8 | WRITE_MODE_4 | mode);
-    wait_us(37);
+    wait_us(1);
     bus_out(data & ~ENABLE_BUS_8 | WRITE_MODE_4 | mode);
   }
   void shift_out(int data) { // Sends word to SPI port
@@ -176,7 +176,7 @@ private:
     *m_CS = 1;
   }
   void bus_out(int data) {
-    printf("Data is: %4X\r\n", data);
+    //printf("Data is: %4X\r\n", data);
     m_busOut->write(data);
   }
 };
