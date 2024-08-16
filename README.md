@@ -6,7 +6,9 @@ Get Practical with Hardware
 LAB 1
 Introductory Serial Communication
 
-This library is designed to be used with MBED OS.
+[LCD documentation](https://newhavendisplay.com/content/specs/NHD-0420H1Z-FSW-GBW-33V3.pdf)
+
+This library is designed to be used with Mbed OS.
 
 # Usage
 This library can be used in 3 ways.
