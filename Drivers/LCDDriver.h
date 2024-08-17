@@ -49,52 +49,20 @@ public:
     } else if (m_busOut->mask() == 0x07FF) {
       m_dataLines = 8;
     } else {
-      //printf("Invalid numer of datalines");
+      printf("Invalid numer of datalines");
     }
   }
 
-  void init_4() { // follow designated procedure in data sheet
-    // bus_out(0x00);
-    thread_sleep_for(100);
-    write_cmd(0x20); // command 0x20 = Wake up
-    wait_us(30);
-    write_cmd(0x20); // command 0x20 = Wake up
-    wait_us(10);
-    write_cmd(0x20); // command 0x20 = Wake up
-    wait_us(10);
-    write_cmd(0x20); // function set
-    wait_us(10);
-    write_cmd(0x28); // function set
-    wait_us(37);
-    write_cmd(0x10); // function set
-    wait_us(37);
-    write_cmd(0x0F); // display ON/OFF
-    wait_us(37);
-    // write_cmd(0x01); // display clear
-    // wait_us(1520);
-    write_cmd(0x06); // entry-mode set
-    wait_us(37);
+  void init() {
+    if (!m_useBus) {
+      init_4();
+    } else if (m_dataLines == 4) {
+      init_4_bus();
+    } else if (m_dataLines == 8) {
+      init_8_bus();
+    }
   }
-  void init_8(void) {
-    bus_out(0x0000);
-    thread_sleep_for(100);
-    write_cmd(0x0030); // command 0x30 = Wake up
-    wait_us(100);
-    write_cmd(0x0030); // command 0x30 = Wake up
-    wait_us(37);
-    write_cmd(0x0030); // command 0x30 = Wake up
-    wait_us(37);
-    write_cmd(0x0038); // function set: 8-bit/2-line
-    wait_us(37);
-    write_cmd(0x0010); // Set cursor
-    wait_us(37);
-    write_cmd(0x000c); // display ON; cursor ON
-    wait_us(37);
-    // write_cmd(0x01); // display clear
-    // wait_us(1520);
-    write_cmd(0x0006); // entry-mode set
-    wait_us(37);
-  }
+
   void write_cmd(int cmd) { // Configures LCD command word
     if (!m_useBus) {
       write_4bit(cmd, COMMAND_MODE);
@@ -135,6 +103,71 @@ private:
   uint8_t m_dataLines;
   bool m_useBus;
 
+  void init_4() { // follow designated procedure in data sheet
+    // bus_out(0x00);
+    thread_sleep_for(100);
+    write_cmd(0x20); // command 0x20 = Wake up
+    wait_us(30);
+    write_cmd(0x20); // command 0x20 = Wake up
+    wait_us(10);
+    write_cmd(0x20); // command 0x20 = Wake up
+    wait_us(10);
+    write_cmd(0x20); // function set
+    wait_us(10);
+    write_cmd(0x28); // function set
+    wait_us(37);
+    write_cmd(0x10); // function set
+    wait_us(37);
+    write_cmd(0x0F); // display ON/OFF
+    wait_us(37);
+    // write_cmd(0x01); // display clear
+    // wait_us(1520);
+    write_cmd(0x06); // entry-mode set
+    wait_us(37);
+  }
+  void init_4_bus() { // follow designated procedure in data sheet
+    // bus_out(0x00);
+    thread_sleep_for(100);
+    write_cmd(0x20); // command 0x20 = Wake up
+    wait_us(30);
+    write_cmd(0x20); // command 0x20 = Wake up
+    wait_us(10);
+    write_cmd(0x20); // command 0x20 = Wake up
+    wait_us(10);
+    write_cmd(0x20); // function set
+    wait_us(10);
+    write_cmd(0x28); // function set
+    wait_us(37);
+    write_cmd(0x10); // function set
+    wait_us(37);
+    write_cmd(0x0F); // display ON/OFF
+    wait_us(37);
+    // write_cmd(0x01); // display clear
+    // wait_us(1520);
+    write_cmd(0x06); // entry-mode set
+    wait_us(37);
+  }
+  void init_8_bus(void) {
+    bus_out(0x0000);
+    thread_sleep_for(100);
+    write_cmd(0x0030); // command 0x30 = Wake up
+    wait_us(100);
+    write_cmd(0x0030); // command 0x30 = Wake up
+    wait_us(37);
+    write_cmd(0x0030); // command 0x30 = Wake up
+    wait_us(37);
+    write_cmd(0x0038); // function set: 8-bit/2-line
+    wait_us(37);
+    write_cmd(0x0010); // Set cursor
+    wait_us(37);
+    write_cmd(0x000c); // display ON; cursor ON
+    wait_us(37);
+    // write_cmd(0x01); // display clear
+    // wait_us(1520);
+    write_cmd(0x0006); // entry-mode set
+    wait_us(37);
+  }
+
   void write_4bit(int data, int mode) { // mode is RS line, cmd=0, data=1
     int hi_n;
     int lo_n;
@@ -149,14 +182,14 @@ private:
     shift_out(lo_n & ~ENABLE);
   }
   void write_4bit_bus(int data, int mode) { // mode is RS line, cmd=0, data=1
-    //printf("data: %4x, mode: %4x\r\n", data, mode);
+    printf("data: %4x, mode: %4x\r\n", data, mode);
     int hi_n;
     int lo_n;
     hi_n = ((data >> 4) & 0x0F); // form the two 4-bit nibbles that will be sent
-    //printf("hi_n: %4x\r\n", hi_n);
+    // printf("hi_n: %4x\r\n", hi_n);
     lo_n = (data & 0x0F);
-    //printf("lo_n: %X\r\n", lo_n);
-    // send each word twice, strobing the Enable line
+    // printf("lo_n: %X\r\n", lo_n);
+    //  send each word twice, strobing the Enable line
     bus_out(hi_n | ENABLE_BUS_4 | WRITE_MODE_4 | mode);
     wait_us(1);
     bus_out(hi_n & ~ENABLE_BUS_4 | WRITE_MODE_4 | mode);
@@ -176,7 +209,7 @@ private:
     *m_CS = 1;
   }
   void bus_out(int data) {
-    //printf("Data is: %4X\r\n", data);
+    // printf("Data is: %4X\r\n", data);
     m_busOut->write(data);
   }
 };
