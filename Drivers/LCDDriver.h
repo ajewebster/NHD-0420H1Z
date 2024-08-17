@@ -182,7 +182,7 @@ private:
     shift_out(lo_n & ~ENABLE);
   }
   void write_4bit_bus(int data, int mode) { // mode is RS line, cmd=0, data=1
-    printf("data: %4x, mode: %4x\r\n", data, mode);
+    // printf("data: %4x, mode: %4x\r\n", data, mode);
     int hi_n;
     int lo_n;
     hi_n = ((data >> 4) & 0x0F); // form the two 4-bit nibbles that will be sent
